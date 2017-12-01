@@ -25,8 +25,8 @@ definition(
 
 
 preferences {
-	section("Title") {
-		// TODO: put inputs here
+    section("Use the following lights...") {
+		input "switches", "capability.switch", multiple: true, required: true
 	}
 }
 
@@ -52,4 +52,14 @@ def initialize() {
 def alarmHandler(evt) {
   log.debug "Alarm Handler value: ${evt.value}"
   log.debug "alarm state: ${location.currentState("alarmSystemStatus")?.value}"
+  
+  if( location.currentState("alarmSystemStatus")?.value == "off" ) {
+  	for (s in switches) {
+  		s.off()
+	}
+  } else {
+	for (s in switches) {
+  		s.on()
+	}
+  }
 }
